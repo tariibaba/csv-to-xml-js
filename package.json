@@ -11,6 +11,12 @@
     "name": "Ayibatari Ibaba",
     "url": "https://github.com/tariibaba"
   },
+  "keywords": [
+    "csv",
+    "xml",
+    "converter",
+    "convert"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/tariibaba/csv-to-xml-js.git"
