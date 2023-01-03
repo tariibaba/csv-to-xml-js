@@ -37,14 +37,14 @@ console.log(xml);
 
 ```xml
 <row>
-<color>red</color>
-<maxSpeed>120</maxSpeed>
-<age>2</age>
+    <color>red</color>
+    <maxSpeed>120</maxSpeed>
+    <age>2</age>
 </row>
 <row>
-<color>blue</color>
-<maxSpeed>150</maxSpeed>
-<age>4</age>
+    <color>blue</color>
+    <maxSpeed>150</maxSpeed>
+    <age>4</age>
 </row>
 ```
 
@@ -80,3 +80,20 @@ Takes string containing CSV data and returns string containing equivalent XML da
 
   Type: `boolean`\
   Default: `true`
+
+- `indentation`: Number of spaces used to indent the XML output. A string like `\t` or `' '` can also be passed.
+
+  Type: `number | string`\
+  Default: `4`
+
+- `quotes`: If a column contains the separator character, you can use a quote charactor to wrap the column content, e.g., "Coding, Beauty" won't be split into two columns during parsing.
+
+  Type: `single | double | all | none | RegExp`
+
+  - `single`: use single quotes
+  - `double`: use double quotes
+  - `all`: use single and double quotes
+  - `none`: ignore quotes - treat as part of CSV
+  - `RegExp`: custom regex pattern, e.g., `/[\(|\)]/` for column enclosed with `(` and `)`.
+
+  Default: `'none'`
