@@ -88,12 +88,12 @@ Takes string containing CSV data and returns string containing equivalent XML da
 
 - `quotes`: If a column contains the separator character, you can use a quote charactor to wrap the column content, e.g., "Coding, Beauty" won't be split into two columns during parsing.
 
-  Type: `single | double | all | none | RegExp`
+  Type: `'single' | 'double' | 'all' | 'none' | RegExp`
 
-  - `single`: use single quotes
-  - `double`: use double quotes
-  - `all`: use single and double quotes
-  - `none`: ignore quotes - treat as part of CSV
-  - `RegExp`: custom regex pattern, e.g., `/[\(|\)]/` for column enclosed with `(` and `)`.
+  - `'single'`: use single quotes
+  - `'double'`: use double quotes
+  - `'all'`: use single and double quotes
+  - `'none'`: ignore quotes - treat as part of CSV
+  - `'RegExp'`: custom regex pattern, e.g., `/[\(|\)]/` for column enclosed with `(` and `)`.
 
   Default: `'none'`
