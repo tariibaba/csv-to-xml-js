@@ -1,8 +1,11 @@
 {
   "name": "csv-to-xml",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "source": "src/index.ts",
   "description": "Easily convert any CSV string to XML data in Node.js and the browser.",
+  "files": [
+    "dist/*"
+  ],
   "author": {
     "email": "tariibabadev@gmail.com",
     "name": "Ayibatari Ibaba",
