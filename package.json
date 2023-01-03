@@ -41,7 +41,8 @@
   "scripts": {
     "test": "jest",
     "watch": "parcel watch",
-    "build": "parcel build"
+    "build": "parcel build",
+    "prepublish": "yarn build"
   },
   "np": {
     "contents": "dist"
