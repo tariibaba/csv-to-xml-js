@@ -130,36 +130,71 @@ it('accepts custom indentation', () => {
   );
 });
 
-it('accepts CSV with quotes', () => {
+describe('accepts CSV with quotes', () => {
   const csv = `color,maxSpeed,age
+    "red, yellow",'120',2`;
+
+  const csv2 = `color,maxSpeed,age
 "red",'120',2`;
-  const xml = csvToXml(csv, { quotes: 'double' });
-  expect(xml).toBe(
-    `<row>
-    <color>red</color>
+  it('double', () => {
+    const xml = csvToXml(csv, { quote: 'double' });
+    expect(xml).toBe(
+      `<row>
+    <color>red, yellow</color>
     <maxSpeed>'120'</maxSpeed>
     <age>2</age>
 </row>
 `
-  );
+    );
+  });
 
-  const xml2 = csvToXml(csv, { quotes: 'single' });
-  expect(xml2).toBe(
-    `<row>
+  it('single', () => {
+    const xml2 = csvToXml(csv2, { quote: 'single' });
+    expect(xml2).toBe(
+      `<row>
     <color>"red"</color>
     <maxSpeed>120</maxSpeed>
     <age>2</age>
 </row>
 `
-  );
+    );
+  });
 
-  const xml3 = csvToXml(csv, { quotes: 'none' });
-  expect(xml3).toBe(
-    `<row>
+  it('none', () => {
+    const xml3 = csvToXml(csv2, { quote: 'none' });
+    expect(xml3).toBe(
+      `<row>
     <color>"red"</color>
     <maxSpeed>'120'</maxSpeed>
     <age>2</age>
 </row>
 `
-  );
+    );
+  });
+
+  it('all', () => {
+    const xml4 = csvToXml(csv2, { quote: 'all' });
+    expect(xml4).toBe(
+      `<row>
+    <color>red</color>
+    <maxSpeed>120</maxSpeed>
+    <age>2</age>
+</row>
+`
+    );
+  });
+
+  it('custom regex', () => {
+    const csv5 = `color,maxSpeed,age
+    (red, yellow),'120',2`;
+    const xml5 = csvToXml(csv5, { quote: /[\(|\)]/ });
+    expect(xml5).toBe(
+      `<row>
+    <color>red, yellow</color>
+    <maxSpeed>'120'</maxSpeed>
+    <age>2</age>
+</row>
+`
+    );
+  });
 });

@@ -1,4 +1,5 @@
 import detectEOL from 'detect-eol';
+import { tryRegexToString, splitIgnoringChar } from './utils';
 
 type CSVToXMLOptions = {
   eol?: string;
@@ -7,7 +8,7 @@ type CSVToXMLOptions = {
   headerList?: string[];
   header?: boolean;
   indentation?: number | string;
-  quotes?: 'single' | 'double' | 'none';
+  quote?: 'single' | 'double' | 'all' | 'none' | RegExp;
 };
 
 const defaultOptions: CSVToXMLOptions = {
@@ -17,7 +18,7 @@ const defaultOptions: CSVToXMLOptions = {
   header: true,
   headerList: [],
   indentation: 4,
-  quotes: 'none',
+  quote: 'none',
 };
 
 export default function csvToXml(
@@ -29,12 +30,35 @@ export default function csvToXml(
   const csvData = csvString.split(eol!).map((row) => row.trim());
   const separator = usedOptions.separator!;
 
-  const firstRow = csvData[0].split(separator);
+  let quote;
+  if (usedOptions.quote instanceof RegExp) {
+    quote = usedOptions.quote;
+  } else if (usedOptions.quote) {
+    quote = usedOptions.quote;
+    quote = { single: "'", double: '"', all: /(?:'|")/, none: undefined }[
+      usedOptions.quote
+    ];
+  }
+
+  const split = (str: string) => {
+    return splitIgnoringChar({ str, separator, charToIgnore: quote }).map(
+      (ch) =>
+        ch.replace(
+          new RegExp(
+            String.raw`${tryRegexToString(quote) ?? ''}(.*?)${
+              tryRegexToString(quote) ?? ''
+            }`
+          ),
+          '$1'
+        )
+    );
+  };
+
+  const firstRow = split(csvData[0]);
+
   const colCount = firstRow.length;
 
-  const foundHeaders = usedOptions.header
-    ? csvData[0].split(separator)
-    : [...Array(colCount)];
+  const foundHeaders = usedOptions.header ? firstRow : [...Array(colCount)];
   const specifiedHeaders: (string | undefined)[] = [...usedOptions.headerList!];
 
   const usedHeaders: string[] = [];
@@ -69,7 +93,7 @@ export default function csvToXml(
       : usedOptions.indentation;
 
   for (let i = rowStartLine; i < csvData.length; i++) {
-    const details = csvData[i].split(separator);
+    const details = split(csvData[i]);
 
     if (details.length < colCount) {
       warn('rows found without enough columns.');
@@ -79,13 +103,6 @@ export default function csvToXml(
     xml += `<${usedOptions.rowName}>\n`;
     for (let j = 0; j < colCount; j++) {
       let colValue = details[j];
-      if (!usedOptions.quotes || usedOptions.quotes !== 'none') {
-        const quoteRemovingRegex = {
-          double: /"(.*?)"/,
-          single: /'(.*?)'/,
-        }[usedOptions.quotes!];
-        colValue = colValue.replace(quoteRemovingRegex, '$1');
-      }
       xml += `${spaces}<${usedHeaders[j]}>${colValue}</${usedHeaders[j]}>\n`;
     }
     xml += `</${usedOptions.rowName}>\n`;
