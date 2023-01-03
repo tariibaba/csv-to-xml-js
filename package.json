@@ -6,6 +6,7 @@
   "files": [
     "dist/*"
   ],
+  "type": "module",
   "author": {
     "email": "tariibabadev@gmail.com",
     "name": "Ayibatari Ibaba",
@@ -22,7 +23,6 @@
     "url": "https://github.com/tariibaba/csv-to-xml-js.git"
   },
   "main": "dist/main.js",
-  "module": "dist/module.js",
   "types": "dist/types.d.ts",
   "license": "MIT",
   "devDependencies": {
@@ -31,6 +31,7 @@
     "@types/jest": "^29.2.5",
     "jest": "^29.3.1",
     "parcel": "latest",
+    "rimraf": "^3.0.2",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4"
@@ -41,6 +42,7 @@
   "scripts": {
     "test": "jest",
     "watch": "parcel watch",
+    "prebuild": "rimraf dist",
     "build": "parcel build",
     "prepublish": "yarn build"
   },
