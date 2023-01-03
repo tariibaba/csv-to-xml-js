@@ -72,7 +72,7 @@ export default function csvToXml(
     } else {
       usedHeaders.push(`col${index + 1}`);
     }
-    if (/\s/g.test(foundHeaders[index])) {
+    if (/\s/g.test(usedHeaders[index])) {
       warn('header name contains whitespace.');
     }
   });
