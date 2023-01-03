@@ -9,7 +9,7 @@ type CSVToXMLOptions = {
 };
 
 const defaultOptions: CSVToXMLOptions = {
-  eol: 'lf',
+  eol: undefined,
   separator: ',',
   rowName: 'row',
   header: true,
