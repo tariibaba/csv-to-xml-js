@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tariibaba.git"
+    "url": "https://github.com/tariibaba/csv-to-xml-js.git"
   },
   "main": "dist/main.js",
   "module": "dist/module.js",
@@ -33,5 +33,8 @@
     "test": "jest",
     "watch": "parcel watch",
     "build": "parcel build"
+  },
+  "np": {
+    "contents": "dist"
   }
 }
