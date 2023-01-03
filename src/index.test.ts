@@ -8,14 +8,14 @@ it('converts basic CSV to XML', () => {
   const xml = csvToXml(csv);
   expect(xml).toBe(
     `<row>
-<color>"red"</color>
-<maxSpeed>120</maxSpeed>
-<age>2</age>
+    <color>"red"</color>
+    <maxSpeed>120</maxSpeed>
+    <age>2</age>
 </row>
 <row>
-<color>"blue"</color>
-<maxSpeed>150</maxSpeed>
-<age>4</age>
+    <color>"blue"</color>
+    <maxSpeed>150</maxSpeed>
+    <age>4</age>
 </row>
 `
   );
@@ -28,9 +28,9 @@ it('accepts custom separator', () => {
   const xml = csvToXml(csv, { separator: '|' });
   expect(xml).toBe(
     `<row>
-<color>"red"</color>
-<maxSpeed>120</maxSpeed>
-<age>2</age>
+    <color>"red"</color>
+    <maxSpeed>120</maxSpeed>
+    <age>2</age>
 </row>
 `
   );
@@ -43,9 +43,9 @@ it('accepts custom rowName', () => {
   const xml = csvToXml(csv, { rowName: 'car' });
   expect(xml).toBe(
     `<car>
-<color>"red"</color>
-<maxSpeed>120</maxSpeed>
-<age>2</age>
+    <color>"red"</color>
+    <maxSpeed>120</maxSpeed>
+    <age>2</age>
 </car>
 `
   );
@@ -58,9 +58,9 @@ it('accepts custom headerList', () => {
   const xml = csvToXml(csv, { headerList: ['color', 'maxSpeed', 'age'] });
   expect(xml).toBe(
     `<row>
-<color>"red"</color>
-<maxSpeed>120</maxSpeed>
-<age>2</age>
+    <color>"red"</color>
+    <maxSpeed>120</maxSpeed>
+    <age>2</age>
 </row>
 `
   );
@@ -72,9 +72,9 @@ it('accepts CSV with no headers', () => {
   const xml = csvToXml(csv, { header: false });
   expect(xml).toBe(
     `<row>
-<col1>"red"</col1>
-<col2>120</col2>
-<col3>2</col3>
+    <col1>"red"</col1>
+    <col2>120</col2>
+    <col3>2</col3>
 </row>
 `
   );
@@ -87,9 +87,78 @@ it('accepts custom EOL', () => {
   const xml = csvToXml(csv, { eol: '\r\n' });
   expect(xml).toBe(
     `<row>
+    <color>"red"</color>
+    <maxSpeed>120</maxSpeed>
+    <age>2</age>
+</row>
+`
+  );
+});
+
+it('accepts custom indentation', () => {
+  const csv = `color,maxSpeed,age
+"red",120,2`;
+
+  const xml = csvToXml(csv, { indentation: 0 });
+  expect(xml).toBe(
+    `<row>
 <color>"red"</color>
 <maxSpeed>120</maxSpeed>
 <age>2</age>
+</row>
+`
+  );
+
+  const xml2 = csvToXml(csv, { indentation: 2 });
+  expect(xml2).toBe(
+    `<row>
+  <color>"red"</color>
+  <maxSpeed>120</maxSpeed>
+  <age>2</age>
+</row>
+`
+  );
+
+  const xml3 = csvToXml(csv, { indentation: ' ' });
+  expect(xml3).toBe(
+    `<row>
+ <color>"red"</color>
+ <maxSpeed>120</maxSpeed>
+ <age>2</age>
+</row>
+`
+  );
+});
+
+it('accepts CSV with quotes', () => {
+  const csv = `color,maxSpeed,age
+"red",'120',2`;
+  const xml = csvToXml(csv, { quotes: 'double' });
+  expect(xml).toBe(
+    `<row>
+    <color>red</color>
+    <maxSpeed>'120'</maxSpeed>
+    <age>2</age>
+</row>
+`
+  );
+
+  const xml2 = csvToXml(csv, { quotes: 'single' });
+  expect(xml2).toBe(
+    `<row>
+    <color>"red"</color>
+    <maxSpeed>120</maxSpeed>
+    <age>2</age>
+</row>
+`
+  );
+
+  const xml3 = csvToXml(csv, { quotes: 'none' });
+  expect(xml3).toBe(
+    `<row>
+    <color>"red"</color>
+    <maxSpeed>'120'</maxSpeed>
+    <age>2</age>
 </row>
 `
   );

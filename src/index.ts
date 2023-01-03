@@ -6,6 +6,8 @@ type CSVToXMLOptions = {
   rowName?: string;
   headerList?: string[];
   header?: boolean;
+  indentation?: number | string;
+  quotes?: 'single' | 'double' | 'none';
 };
 
 const defaultOptions: CSVToXMLOptions = {
@@ -14,6 +16,8 @@ const defaultOptions: CSVToXMLOptions = {
   rowName: 'row',
   header: true,
   headerList: [],
+  indentation: 4,
+  quotes: 'none',
 };
 
 export default function csvToXml(
@@ -59,6 +63,11 @@ export default function csvToXml(
     return xml;
   }
 
+  const spaces =
+    typeof usedOptions.indentation === 'number'
+      ? ' '.repeat(usedOptions.indentation)
+      : usedOptions.indentation;
+
   for (let i = rowStartLine; i < csvData.length; i++) {
     const details = csvData[i].split(separator);
 
@@ -69,7 +78,15 @@ export default function csvToXml(
 
     xml += `<${usedOptions.rowName}>\n`;
     for (let j = 0; j < colCount; j++) {
-      xml += `<${usedHeaders[j]}>${details[j]}</${usedHeaders[j]}>\n`;
+      let colValue = details[j];
+      if (!usedOptions.quotes || usedOptions.quotes !== 'none') {
+        const quoteRemovingRegex = {
+          double: /"(.*?)"/,
+          single: /'(.*?)'/,
+        }[usedOptions.quotes!];
+        colValue = colValue.replace(quoteRemovingRegex, '$1');
+      }
+      xml += `${spaces}<${usedHeaders[j]}>${colValue}</${usedHeaders[j]}>\n`;
     }
     xml += `</${usedOptions.rowName}>\n`;
   }
